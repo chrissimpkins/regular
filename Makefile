@@ -1,8 +1,8 @@
 build-dev:
-	.venv/bin/maturin build
+	maturin build
 
 build-release:
-	.venv/bin/maturin build --release --strip
+	maturin build --release --strip
 
 build-venv:
 	python3 -m venv .venv
@@ -11,11 +11,11 @@ build-venv:
 
 # installs compiled library in Python venv
 install-dev:
-	.venv/bin/maturin develop
+	maturin develop
 
 # installs compiled release target build in Python venv
 install-release:
-	.venv/bin/maturin develop --release --strip
+	maturin develop --release --strip
 
 test: install-dev
 	.venv/bin/pytest
