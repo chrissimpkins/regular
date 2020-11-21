@@ -17,6 +17,10 @@ install-dev:
 install-release:
 	maturin develop --release --strip
 
+lint-rust:
+	cargo fmt
+	cargo clippy --all-targets --all-features
+
 test: install-dev
 	.venv/bin/pytest
 
