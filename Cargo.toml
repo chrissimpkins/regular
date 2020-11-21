@@ -1,9 +1,10 @@
 [package]
 name = "regular"
 version = "0.1.0"
+description = "A Python wrapper for the Rust regex regular expression library"
 authors = ["Chris Simpkins <git.simpkins@gmail.com>"]
 edition = "2018"
-keywords = ["regex", "regularexpression", "match", "search", "replace"]
+keywords = ["regex", "regularexpression", "text", "match", "search", "replace", "split", "rust"]
 license = "Apache-2.0"
 readme = "README.md"
 repository = "https://github.com/chrissimpkins/regular"
