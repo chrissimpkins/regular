@@ -32,6 +32,14 @@ impl RegularExpression {
     }
 }
 
+#[pymethods]
+impl RegularExpression {
+    // auxiliary methods
+    pub fn as_str(&self) -> String {
+        self.regex.as_str().into()
+    }
+}
+
 // Functions
 fn re_compile(regex_str: &str) -> PyResult<RegularExpression> {
     match RegularExpression::new(regex_str) {
@@ -44,6 +52,7 @@ fn re_compile(regex_str: &str) -> PyResult<RegularExpression> {
 mod tests {
     use super::*;
 
+    // RegularExpression struct compile tests
     #[test]
     fn test_regularexpression_compile_success() {
         // should not fail
@@ -54,5 +63,12 @@ mod tests {
     fn test_regularexpression_compile_fail() {
         // should error on invalid regex definition string
         assert!(RegularExpression::new("\\\\\\\\\\\\\\").is_err());
-}
+    }
+
+    // RegularExpression auxillary method tests
+    #[test]
+    fn test_regularexpression_as_str() {
+        let re = RegularExpression::new("[^01]").unwrap();
+        assert_eq!(re.as_str(), "[^01]".to_string());
+    }
 }
