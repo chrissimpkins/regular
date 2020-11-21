@@ -38,6 +38,10 @@ impl RegularExpression {
     pub fn as_str(&self) -> String {
         self.regex.as_str().into()
     }
+    // match methods
+    pub fn is_match(&self, haystack_str: &str) -> bool {
+        self.regex.is_match(haystack_str)
+    }
 }
 
 // Functions
@@ -64,4 +68,4 @@ mod tests {
         // should error on invalid regex definition string
         assert!(RegularExpression::new("\\\\\\\\\\\\\\").is_err());
     }
-    }
+}
