@@ -39,3 +39,14 @@ fn re_compile(regex_str: &str) -> PyResult<RegularExpression> {
         Err(error) => return Err(PyException::new_err(error.to_string())),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_regularexpression_compile_success() {
+        // should not fail
+        RegularExpression::new("[^01]");
+    }
+}
