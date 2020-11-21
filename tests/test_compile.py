@@ -10,5 +10,5 @@ def test_regularexpression_compile_success():
 
 def test_regularexpression_compile_fail():
     # should raise
-    with pytest.raises(Exception) as e:
+    with pytest.raises(Exception):
         regular.compile("\\\\\\\\\\\\\\")
