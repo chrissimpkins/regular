@@ -3,14 +3,15 @@ name = "regular"
 version = "0.1.0"
 authors = ["Chris Simpkins <git.simpkins@gmail.com>"]
 edition = "2018"
-keywords    = ["regex", "regularexpression", "match", "search", "replace"]
-license     = "Apache-2.0"
-readme      = "README.md"
-repository  = "https://github.com/chrissimpkins/regular"
+keywords = ["regex", "regularexpression", "match", "search", "replace"]
+license = "Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/chrissimpkins/regular"
+homepage = "https://github.com/chrissimpkins/regular"
 
 [lib]
 name = "regular"
-crate-type = ["cdylib"]
+crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 regex = "1.4.2"
@@ -18,3 +19,22 @@ regex = "1.4.2"
 [dependencies.pyo3]
 version = "0.12.3"
 features = ["extension-module"]
+
+[package.metadata.maturin]
+classifier = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "License :: OSI Approved",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python",
+    "Programming Language :: Rust",
+]
