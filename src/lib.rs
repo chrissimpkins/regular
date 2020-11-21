@@ -47,6 +47,12 @@ mod tests {
     #[test]
     fn test_regularexpression_compile_success() {
         // should not fail
-        RegularExpression::new("[^01]");
+        assert!(RegularExpression::new("[^01]").is_ok());
     }
+
+    #[test]
+    fn test_regularexpression_compile_fail() {
+        // should error on invalid regex definition string
+        assert!(RegularExpression::new("\\\\\\\\\\\\\\").is_err());
+}
 }
