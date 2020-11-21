@@ -64,14 +64,4 @@ mod tests {
         // should error on invalid regex definition string
         assert!(RegularExpression::new("\\\\\\\\\\\\\\").is_err());
     }
-
-    // RegularExpression auxillary method tests
-    #[test]
-    fn test_regularexpression_as_str() {
-        let gil = Python::acquire_gil();
-        let py = gil.python();
-        let obj = PyCell::new(py, RegularExpression::new("[^01]").unwrap()).unwrap();
-        let obj_ref = obj.borrow();
-        assert_eq!(obj_ref.as_str(), "[^01]".to_string());
     }
-}
