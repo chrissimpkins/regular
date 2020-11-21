@@ -35,8 +35,8 @@ impl RegularExpression {
 // Functions
 fn re_compile(regex_str: &str) -> PyResult<RegularExpression> {
     match RegularExpression::new(regex_str) {
-        Ok(re) => return Ok(re),
-        Err(error) => return Err(PyException::new_err(error.to_string())),
+        Ok(r) => Ok(r),
+        Err(e) => Err(PyException::new_err(e.to_string())),
     }
 }
 
