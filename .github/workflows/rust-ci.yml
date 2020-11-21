@@ -25,23 +25,21 @@ jobs:
         with:
           command: clippy
           args: --all-targets --all-features
-
-  test:
-    strategy:
-      matrix:
-        toolchain: [stable, beta, nightly]
-    name: Rust + Linux CI
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install latest ${{ matrix.toolchain }} toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: ${{ matrix.toolchain }}
-
-      - name: Run cargo test
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
-          toolchain: ${{ matrix.toolchain }}
+  # test:
+  #   strategy:
+  #     matrix:
+  #       toolchain: [stable, beta, nightly]
+  #   name: Rust + Linux CI
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Install latest ${{ matrix.toolchain }} toolchain
+  #       uses: actions-rs/toolchain@v1
+  #       with:
+  #         profile: minimal
+  #         toolchain: ${{ matrix.toolchain }}
+  #     - name: Run cargo test
+  #       uses: actions-rs/cargo@v1
+  #       with:
+  #         command: test
+  #         toolchain: ${{ matrix.toolchain }}
