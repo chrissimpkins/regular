@@ -68,7 +68,10 @@ mod tests {
     // RegularExpression auxillary method tests
     #[test]
     fn test_regularexpression_as_str() {
-        let re = RegularExpression::new("[^01]").unwrap();
-        assert_eq!(re.as_str(), "[^01]".to_string());
+        let gil = Python::acquire_gil();
+        let py = gil.python();
+        let obj = PyCell::new(py, RegularExpression::new("[^01]").unwrap()).unwrap();
+        let obj_ref = obj.borrow();
+        assert_eq!(obj_ref.as_str(), "[^01]".to_string());
     }
 }
