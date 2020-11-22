@@ -3,7 +3,7 @@
 
 use pyo3::exceptions::PyException;
 use pyo3::prelude::*;
-use regex::Regex;
+use regex::{Regex, RegexBuilder};
 
 #[pymodule]
 fn regular(py: Python, m: &PyModule) -> PyResult<()> {
@@ -25,7 +25,7 @@ struct RegularExpression {
 
 impl RegularExpression {
     fn new(regex_str: &str) -> Result<Self, regex::Error> {
-        match Regex::new(regex_str) {
+        match RegexBuilder::new(regex_str).build() {
             Ok(r) => Ok(RegularExpression { regex: r }),
             Err(e) => Err(e),
         }
