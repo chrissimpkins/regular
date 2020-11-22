@@ -6,20 +6,49 @@ import regular
 
 
 def test_regularexpression_as_str():
-    re = regular.compile("[^01]")
-    assert re.as_str() == "[^01]"
+    regex = regular.compile("[^01]")
+    assert regex.as_str() == "[^01]"
 
 
 # match tests
 
 
 def test_regularexpression_is_match():
-    re = regular.compile("[01]{3}")
+    regex = regular.compile("[01]{3}")
     test_string = "This string includes 010"
-    assert re.is_match(test_string)
+    assert regex.is_match(test_string)
 
 
 def test_regularexpression_is_match_false():
-    re = regular.compile("[01]{3}")
+    regex = regular.compile("[01]{3}")
     test_string = "This string includes 0"
-    assert re.is_match(test_string) is False
+    assert regex.is_match(test_string) is False
+
+
+# replace tests
+
+
+def test_regularexpression_replace():
+    regex = regular.compile("[^01]+")
+    assert regex.replace("1078910", "") == "1010"
+
+
+def test_regularexpression_replace_n_1():
+    # performs a single replacement
+    regex = regular.compile("[01]")
+    assert regex.replace("1078910", "") == "078910"
+
+
+def test_regularexpression_replace_capture_groups():
+    regex = regular.compile(r"(?P<last>[^,\s]+),\s+(?P<first>\S+)")
+    assert regex.replace("Springsteen, Bruce", "$first $last") == "Bruce Springsteen"
+
+
+def test_regularexpression_replace_capture_groups_escapes():
+    regex = regular.compile(r"(?P<first>\w+)\s+(?P<second>\w+)")
+    assert regex.replace("deep fried", "${first}_$second") == "deep_fried"
+
+
+def test_regularexpression_replace_no_match():
+    regex = regular.compile(r"\d")
+    assert regex.replace("abcdefg", "") == "abcdefg"
