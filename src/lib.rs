@@ -1,8 +1,8 @@
-#![allow(unused)]
-// use std::error::Error;
+// #![allow(unused)]
 
-use pyo3::class::basic::PyObjectProtocol;
-use pyo3::exceptions::{PyException, PyValueError};
+use pyo3::class::basic::{CompareOp, PyObjectProtocol};
+use pyo3::create_exception;
+use pyo3::exceptions::PyValueError;
 use pyo3::prelude::*;
 use regex::{Regex, RegexBuilder};
 
@@ -15,6 +15,11 @@ fn regular(py: Python, m: &PyModule) -> PyResult<()> {
     fn compile_py(_py: Python, regex_str: &str) -> PyResult<RegularExpression> {
         re_compile(regex_str)
     }
+    // Custom exceptions
+    m.add(
+        "RegularUnimplementedError",
+        py.get_type::<RegularUnimplementedError>(),
+    )?;
     Ok(())
 }
 
@@ -52,6 +57,16 @@ impl PyObjectProtocol<'_> for RegularExpression {
             .replace(" regex:", "with pattern: ")
             .trim()
             .into())
+    }
+
+    fn __richcmp__(&self, other: RegularExpression, op: CompareOp) -> PyResult<bool> {
+        match op {
+            CompareOp::Eq => Ok(self.regex.as_str() == other.regex.as_str()),
+            CompareOp::Ne => Ok(self.regex.as_str() != other.regex.as_str()),
+            _ => Err(RegularUnimplementedError::new_err(
+                "unimplemented comparison operator",
+            )),
+        }
     }
 }
 
@@ -126,6 +141,15 @@ fn re_compile(regex_str: &str) -> PyResult<RegularExpression> {
         Err(e) => Err(PyValueError::new_err(e.to_string())),
     }
 }
+
+// Exceptions
+
+// RegularUnimplementedError
+create_exception!(
+    regular,
+    RegularUnimplementedError,
+    pyo3::exceptions::PyException
+);
 
 #[cfg(test)]
 mod tests {
