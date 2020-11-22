@@ -52,3 +52,23 @@ def test_regularexpression_replace_capture_groups_escapes():
 def test_regularexpression_replace_no_match():
     regex = regular.compile(r"\d")
     assert regex.replace("abcdefg", "") == "abcdefg"
+
+
+def test_regularexpression_replace_all():
+    regex = regular.compile("[01]")
+    assert regex.replace_all("1078910", "") == "789"
+
+
+def test_regularexpression_replace_all_no_match():
+    regex = regular.compile(r"[a-z]")
+    assert regex.replace_all("1078910", "") == "1078910"
+
+
+def test_regularexpression_replacen():
+    regex = regular.compile("[01]")
+    assert regex.replacen("1078910", 2, "") == "78910"
+
+
+def test_regularexpression_replacen_no_match():
+    regex = regular.compile("[a-z]")
+    assert regex.replacen("1078910", 2, "") == "1078910"

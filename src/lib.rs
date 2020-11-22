@@ -48,6 +48,14 @@ impl RegularExpression {
         self.regex.replace(haystack_str, replace_str).into()
     }
 
+    pub fn replace_all(&self, haystack_str: &str, replace_str: &str) -> String {
+        self.regex.replace_all(haystack_str, replace_str).into()
+    }
+
+    pub fn replacen(&self, haystack_str: &str, limit: usize, replace_str: &str) -> String {
+        self.regex.replacen(haystack_str, limit, replace_str).into()
+    }
+
     // split methods
     // TODO: need to create a split struct and implement the
     // PyIterProtocol trait on it
