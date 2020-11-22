@@ -1,7 +1,7 @@
 #![allow(unused)]
 // use std::error::Error;
 
-use pyo3::exceptions::PyException;
+use pyo3::exceptions::{PyException, PyValueError};
 use pyo3::prelude::*;
 use regex::{Regex, RegexBuilder};
 
@@ -99,7 +99,7 @@ struct Match {
 fn re_compile(regex_str: &str) -> PyResult<RegularExpression> {
     match RegularExpression::new(regex_str) {
         Ok(r) => Ok(r),
-        Err(e) => Err(PyException::new_err(e.to_string())),
+        Err(e) => Err(PyValueError::new_err(e.to_string())),
     }
 }
 
