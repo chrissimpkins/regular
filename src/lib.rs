@@ -38,6 +38,20 @@ impl RegularExpression {
     pub fn as_str(&self) -> String {
         self.regex.as_str().into()
     }
+
+    // find methods
+    pub fn find(&self, haystack_str: &str) -> Option<Match> {
+        match self.regex.find(haystack_str) {
+            Some(mo) => Some(Match {
+                start: mo.start(),
+                end: mo.end(),
+                range: (mo.range().start, mo.range().end),
+                as_str: mo.as_str().into(),
+            }),
+            None => None,
+        }
+    }
+
     // match methods
     pub fn is_match(&self, haystack_str: &str) -> bool {
         self.regex.is_match(haystack_str)
@@ -67,6 +81,18 @@ impl RegularExpression {
     //     }
     //     IterNextOutput::Return("end")
     // }
+}
+
+#[pyclass(dict, module = "regular")]
+struct Match {
+    #[pyo3(get, set)]
+    start: usize,
+    #[pyo3(get, set)]
+    end: usize,
+    #[pyo3(get, set)]
+    range: (usize, usize),
+    #[pyo3(get, set)]
+    as_str: String,
 }
 
 // Functions

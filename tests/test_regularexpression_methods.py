@@ -10,6 +10,27 @@ def test_regularexpression_as_str():
     assert regex.as_str() == "[^01]"
 
 
+# find tests
+
+
+def test_regularexpression_find():
+    regex = regular.compile(r"\b\w{13}\b")
+    test_string = "I categorically deny having triskaidekaphobia."
+    m = regex.find(test_string)
+    assert m.start == 2
+    assert m.end == 15
+    assert m.range == (2, 15)
+    assert m.as_str == "categorically"
+    assert test_string[m.start : m.end] == "categorically"
+
+
+def test_regularexpression_find_no_match():
+    regex = regular.compile("[01]")
+    test_string = "I categorically deny having triskaidekaphobia."
+    m = regex.find(test_string)
+    assert m is None
+
+
 # match tests
 
 
