@@ -1,6 +1,7 @@
 #![allow(unused)]
 // use std::error::Error;
 
+use pyo3::class::basic::PyObjectProtocol;
 use pyo3::exceptions::{PyException, PyValueError};
 use pyo3::prelude::*;
 use regex::{Regex, RegexBuilder};
@@ -19,6 +20,7 @@ fn regular(py: Python, m: &PyModule) -> PyResult<()> {
 
 // Classes
 #[pyclass(dict, module = "regular")]
+#[derive(Clone, Debug)]
 struct RegularExpression {
     regex: Regex,
 }
@@ -29,6 +31,27 @@ impl RegularExpression {
             Ok(r) => Ok(RegularExpression { regex: r }),
             Err(e) => Err(e),
         }
+    }
+}
+
+#[pyproto]
+impl PyObjectProtocol<'_> for RegularExpression {
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!("{:?}", &self)
+            .replace("{", "")
+            .replace("}", "")
+            .replace(" regex:", "with pattern: ")
+            .trim()
+            .into())
+    }
+
+    fn __str__(&self) -> PyResult<String> {
+        Ok(format!("{:?}", &self)
+            .replace("{", "")
+            .replace("}", "")
+            .replace(" regex:", "with pattern: ")
+            .trim()
+            .into())
     }
 }
 
@@ -84,6 +107,7 @@ impl RegularExpression {
 }
 
 #[pyclass(dict, module = "regular")]
+#[derive(Clone, Debug, Eq, PartialEq)]
 struct Match {
     #[pyo3(get, set)]
     start: usize,
