@@ -11,7 +11,7 @@ def test_match_str_method():
     text = "10234510"
     m = regex.find(text)
     assert type(m) is Match
-    assert m.__str__() == 'Match < start: 0, end: 1, range: (0, 1), as_str: "1" >'
+    assert m.__str__() == 'Match < start: 0, end: 1, text: "1" >'
 
 
 def test_match_repr_method():
@@ -19,7 +19,7 @@ def test_match_repr_method():
     text = "10234510"
     m = regex.find(text)
     assert type(m) is Match
-    assert m.__repr__() == 'Match < start: 0, end: 1, range: (0, 1), as_str: "1" >'
+    assert m.__repr__() == 'Match < start: 0, end: 1, text: "1" >'
 
 
 def test_match_richcmp_eq_method():
@@ -38,7 +38,7 @@ def test_match_richcmp_eq_method():
     assert type(m4) is Match
     assert m1 == m3
     assert (m1 == m2) is False
-    assert m4.as_str == m1.as_str
+    assert m4.text == m1.text
     assert (m1 == m4) is False  # matched same string, but different location
 
 
@@ -58,7 +58,7 @@ def test_match_richcmp_ne_method():
     assert type(m4) is Match
     assert (m1 != m3) is False
     assert m1 != m2
-    assert m4.as_str == m1.as_str
+    assert m4.text == m1.text
     assert m1 != m4  # matched same string, but different location
 
 

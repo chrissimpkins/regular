@@ -6,6 +6,9 @@ use pyo3::exceptions::PyValueError;
 use pyo3::prelude::*;
 use regex::{Regex, RegexBuilder};
 
+// ===================================================
+// Module
+// ===================================================
 #[pymodule]
 fn regular(py: Python, m: &PyModule) -> PyResult<()> {
     // Classes
@@ -24,7 +27,9 @@ fn regular(py: Python, m: &PyModule) -> PyResult<()> {
     Ok(())
 }
 
+// ===================================================
 // Classes
+// ===================================================
 #[pyclass(dict, module = "regular")]
 #[derive(Clone, Debug)]
 struct RegularExpression {
@@ -84,8 +89,7 @@ impl RegularExpression {
             Some(mo) => Some(Match {
                 start: mo.start(),
                 end: mo.end(),
-                range: (mo.range().start, mo.range().end),
-                as_str: mo.as_str().into(),
+                text: mo.as_str().into(),
             }),
             None => None,
         }
@@ -121,6 +125,7 @@ impl RegularExpression {
     //     IterNextOutput::Return("end")
     // }
 }
+
 #[pyclass(dict, module = "regular")]
 #[derive(Clone, Debug, Eq, PartialEq)]
 struct Match {
@@ -129,9 +134,18 @@ struct Match {
     #[pyo3(get, set)]
     end: usize,
     #[pyo3(get, set)]
-    range: (usize, usize),
-    #[pyo3(get, set)]
-    as_str: String,
+    text: String,
+}
+
+#[pymethods]
+impl Match {
+    pub fn as_str(&self) -> &str {
+        &self.text
+    }
+
+    pub fn range(&self) -> (usize, usize) {
+        (self.start, self.end)
+    }
 }
 
 #[pyproto]
@@ -163,7 +177,9 @@ impl PyObjectProtocol<'_> for Match {
     }
 }
 
+// ===================================================
 // Functions
+// ===================================================
 fn re_compile(regex_str: &str) -> PyResult<RegularExpression> {
     match RegularExpression::new(regex_str) {
         Ok(r) => Ok(r),
@@ -171,9 +187,9 @@ fn re_compile(regex_str: &str) -> PyResult<RegularExpression> {
     }
 }
 
+// ===================================================
 // Exceptions
-
-// RegularUnimplementedError
+// ===================================================
 create_exception!(
     regular,
     RegularUnimplementedError,

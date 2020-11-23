@@ -15,6 +15,39 @@ def test_match_obj_import():
     from regular import Match
 
 
+# Match as_str method
+
+
+def test_match_as_str_method():
+    from regular import Match
+
+    regex = regular.compile("[01]")
+    regex2 = regular.compile("[34]")
+    text = "10234510"
+    m = regex.find(text)
+    m2 = regex2.find(text)
+    assert type(m) is Match
+    assert m.as_str() == "1"
+    assert m2.as_str() == "3"
+
+
+# Match range method
+
+
+def test_match_range_method():
+    from regular import Match
+
+    regex = regular.compile("[01]")
+    regex2 = regular.compile("[34]")
+    text = "10234510"
+    m = regex.find(text)
+    m2 = regex2.find(text)
+    assert type(m) is Match
+    assert type(m2) is Match
+    assert m.range() == (0, 1)
+    assert m2.range() == (3, 4)
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # RegularExpression class tests
@@ -45,8 +78,8 @@ def test_regularexpression_find():
     m = regex.find(test_string)
     assert m.start == 2
     assert m.end == 15
-    assert m.range == (2, 15)
-    assert m.as_str == "categorically"
+    assert m.range() == (2, 15)
+    assert m.text == "categorically"
     assert test_string[m.start : m.end] == "categorically"
 
 
