@@ -1,9 +1,11 @@
 // #![allow(unused)]
 
 use pyo3::class::basic::{CompareOp, PyObjectProtocol};
+use pyo3::class::iter::IterNextOutput;
 use pyo3::create_exception;
 use pyo3::exceptions::PyValueError;
 use pyo3::prelude::*;
+use pyo3::PyIterProtocol;
 use regex::{Regex, RegexBuilder};
 
 // ===================================================
@@ -13,6 +15,7 @@ use regex::{Regex, RegexBuilder};
 fn regular(py: Python, m: &PyModule) -> PyResult<()> {
     // Classes
     m.add_class::<Match>()?;
+    m.add_class::<MatchesIterator>()?;
     m.add_class::<RegularExpression>()?;
     // Functions
     #[pyfn(m, "compile")]
@@ -95,6 +98,22 @@ impl RegularExpression {
         }
     }
 
+    pub fn find_iter(&self, haystack_str: &str) -> MatchesIterator {
+        let iterator: Vec<Match> = self
+            .regex
+            .find_iter(haystack_str)
+            .map(|m| Match {
+                start: m.start(),
+                end: m.end(),
+                text: m.as_str().into(),
+            })
+            .collect();
+
+        MatchesIterator {
+            iterator: std::boxed::Box::new(iterator.into_iter()),
+        }
+    }
+
     // match methods
     pub fn is_match(&self, haystack_str: &str) -> bool {
         self.regex.is_match(haystack_str)
@@ -173,6 +192,25 @@ impl PyObjectProtocol<'_> for Match {
             _ => Err(RegularUnimplementedError::new_err(
                 "unimplemented comparison operator",
             )),
+        }
+    }
+}
+
+#[pyclass(dict, module = "regular")]
+struct MatchesIterator {
+    iterator: Box<dyn Iterator<Item = Match> + Send>,
+}
+
+#[pyproto]
+impl PyIterProtocol for MatchesIterator {
+    fn __iter__(slf: PyRef<Self>) -> PyRef<Self> {
+        slf
+    }
+
+    fn __next__(mut slf: PyRefMut<Self>) -> IterNextOutput<Match, &'static str> {
+        match slf.iterator.next() {
+            Some(mo) => IterNextOutput::Yield(mo),
+            None => IterNextOutput::Return("Ended"),
         }
     }
 }

@@ -19,14 +19,12 @@ def test_match_obj_import():
 
 
 def test_match_as_str_method():
-    from regular import Match
-
     regex = regular.compile("[01]")
     regex2 = regular.compile("[34]")
     text = "10234510"
     m = regex.find(text)
     m2 = regex2.find(text)
-    assert type(m) is Match
+    assert type(m) is regular.Match
     assert m.as_str() == "1"
     assert m2.as_str() == "3"
 
@@ -35,15 +33,13 @@ def test_match_as_str_method():
 
 
 def test_match_range_method():
-    from regular import Match
-
     regex = regular.compile("[01]")
     regex2 = regular.compile("[34]")
     text = "10234510"
     m = regex.find(text)
     m2 = regex2.find(text)
-    assert type(m) is Match
-    assert type(m2) is Match
+    assert type(m) is regular.Match
+    assert type(m2) is regular.Match
     assert m.range() == (0, 1)
     assert m2.range() == (3, 4)
 
@@ -88,6 +84,55 @@ def test_regularexpression_find_no_match():
     test_string = "I categorically deny having triskaidekaphobia."
     m = regex.find(test_string)
     assert m is None
+
+
+# RegularExpression find_iter tests
+
+
+def test_regularexpression_find_iter():
+    regex = regular.compile("[01]")
+    text = "0123410"
+    i = regex.find_iter(text)
+    assert type(i) is regular.MatchesIterator
+    # test iteration with next
+    m1 = next(i)
+    assert m1.start == 0 and m1.end == 1 and m1.text == "0"
+    m2 = next(i)
+    assert m2.start == 1 and m2.end == 2 and m2.text == "1"
+    m3 = next(i)
+    assert m3.start == 5 and m3.end == 6 and m3.text == "1"
+    m4 = next(i)
+    assert m4.start == 6 and m4.end == 7 and m4.text == "0"
+    with pytest.raises(StopIteration):
+        next(i)
+    # test for loop
+    i2 = regex.find_iter(text)
+    for m in i2:
+        assert type(m) is regular.Match
+    # test cast to list collection
+    i3 = regex.find_iter(text)
+    col = list(i3)
+    assert len(col) == 4
+    for m in col:
+        assert type(m) is regular.Match
+
+
+def test_regularexpression_find_iter_no_match():
+    regex = regular.compile("[ab]")
+    text = "01234510"
+    i = regex.find_iter(text)
+    assert type(i) is regular.MatchesIterator
+    # has empty/no match mechanics
+    with pytest.raises(StopIteration):
+        next(i)
+    i2 = regex.find_iter(text)
+    for m in i2:
+        # does not raise exception when no matches
+        pass
+    i3 = regex.find_iter(text)
+    # cast to list does not raise exception
+    col = list(i3)
+    assert len(col) == 0
 
 
 # RegularExpression match tests
