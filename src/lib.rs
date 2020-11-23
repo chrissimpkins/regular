@@ -133,6 +133,10 @@ impl RegularExpression {
     pub fn replacen(&self, haystack_str: &str, limit: usize, replace_str: &str) -> String {
         self.regex.replacen(haystack_str, limit, replace_str).into()
     }
+
+    pub fn split<'t>(&self, haystack_str: &'t str) -> Vec<&'t str> {
+        self.regex.split(haystack_str).collect()
+    }
 }
 
 #[pyclass(dict, module = "regular")]

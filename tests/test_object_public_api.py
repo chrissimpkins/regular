@@ -226,3 +226,22 @@ def test_regularexpression_replacen():
 def test_regularexpression_replacen_no_match():
     regex = regular.compile("[a-z]")
     assert regex.replacen("1078910", 2, "") == "1078910"
+
+
+# RegularExpression split tests
+
+
+def test_regularexpression_split():
+    regex = regular.compile(r"[ \t]+")
+    text = "a b \t  c\td    e"
+    m = regex.split(text)
+    assert type(m) is list
+    assert m == ["a", "b", "c", "d", "e"]
+
+
+def test_regularexpression_split_no_match():
+    regex = regular.compile(r"[01]+")
+    text = "a b \t  c\td    e"
+    m = regex.split(text)
+    assert type(m) is list
+    assert m == ["a b \t  c\td    e"]
