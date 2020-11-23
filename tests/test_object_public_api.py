@@ -86,6 +86,35 @@ def test_regularexpression_find_no_match():
     assert m is None
 
 
+# RegularExpression find_all tests
+
+
+def test_regularexpression_find_all():
+    regex = regular.compile("[01]")
+    text = "0123410"
+    i = regex.find_all(text)
+    assert type(i) is list
+    assert len(i) == 4
+    for item in i:
+        assert type(item) is regular.Match
+    m1 = i[0]
+    assert m1.start == 0 and m1.end == 1 and m1.text == "0"
+    m2 = i[1]
+    assert m2.start == 1 and m2.end == 2 and m2.text == "1"
+    m3 = i[2]
+    assert m3.start == 5 and m3.end == 6 and m3.text == "1"
+    m4 = i[3]
+    assert m4.start == 6 and m4.end == 7 and m4.text == "0"
+
+
+def test_regularexpression_find_all_no_match():
+    regex = regular.compile("[ab]")
+    text = "0123410"
+    i = regex.find_all(text)
+    assert type(i) is list
+    assert len(i) == 0
+
+
 # RegularExpression find_iter tests
 
 

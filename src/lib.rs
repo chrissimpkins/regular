@@ -50,6 +50,7 @@ impl RegularExpression {
 
 #[pyproto]
 impl PyObjectProtocol<'_> for RegularExpression {
+    // protocol methods documented in https://pyo3.rs/master/class/protocols.html
     fn __repr__(&self) -> PyResult<String> {
         Ok(format!("{:?}", &self)
             .replace("{", "")
@@ -98,19 +99,20 @@ impl RegularExpression {
         }
     }
 
-    pub fn find_iter(&self, haystack_str: &str) -> MatchesIterator {
-        let iterator: Vec<Match> = self
-            .regex
+    pub fn find_all(&self, haystack_str: &str) -> Vec<Match> {
+        self.regex
             .find_iter(haystack_str)
             .map(|m| Match {
                 start: m.start(),
                 end: m.end(),
                 text: m.as_str().into(),
             })
-            .collect();
+            .collect()
+    }
 
+    pub fn find_iter(&self, haystack_str: &str) -> MatchesIterator {
         MatchesIterator {
-            iterator: std::boxed::Box::new(iterator.into_iter()),
+            iterator: std::boxed::Box::new(self.find_all(haystack_str).into_iter()),
         }
     }
 
@@ -131,18 +133,6 @@ impl RegularExpression {
     pub fn replacen(&self, haystack_str: &str, limit: usize, replace_str: &str) -> String {
         self.regex.replacen(haystack_str, limit, replace_str).into()
     }
-
-    // split methods
-    // TODO: need to create a split struct and implement the
-    // PyIterProtocol trait on it
-    // (https://docs.rs/pyo3/0.12.3/pyo3/class/iter/trait.PyIterProtocol.html)
-
-    // pub fn split(&self, haystack_str: &str) -> IterNextOutput<String, &str> {
-    //     for x in self.regex.split(haystack_str) {
-    //         IterNextOutput::Yield(x.to_string());
-    //     }
-    //     IterNextOutput::Return("end")
-    // }
 }
 
 #[pyclass(dict, module = "regular")]
@@ -169,6 +159,7 @@ impl Match {
 
 #[pyproto]
 impl PyObjectProtocol<'_> for Match {
+    // protocol methods documented in https://pyo3.rs/master/class/protocols.html
     fn __repr__(&self) -> PyResult<String> {
         Ok(format!("{:?}", &self)
             .replace("{", "<")
