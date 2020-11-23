@@ -2,6 +2,32 @@ import pytest
 
 import regular
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# Match class tests
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Match class import
+
+
+def test_match_obj_import():
+    from regular import Match
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# RegularExpression class tests
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# RegularExpression class import
+
+
+def test_regularexpression_obj_import():
+    from regular import RegularExpression
+
+
 # RegularExpression auxiliary method tests
 
 
@@ -10,7 +36,7 @@ def test_regularexpression_as_str():
     assert regex.as_str() == "[^01]"
 
 
-# find tests
+# RegularExpression find tests
 
 
 def test_regularexpression_find():
@@ -31,7 +57,7 @@ def test_regularexpression_find_no_match():
     assert m is None
 
 
-# match tests
+# RegularExpression match tests
 
 
 def test_regularexpression_is_match():
@@ -46,7 +72,7 @@ def test_regularexpression_is_match_false():
     assert regex.is_match(test_string) is False
 
 
-# replace tests
+# RegularExpression replace tests
 
 
 def test_regularexpression_replace():
