@@ -22,6 +22,46 @@ def test_match_repr_method():
     assert m.__repr__() == 'Match < start: 0, end: 1, range: (0, 1), as_str: "1" >'
 
 
+def test_match_richcmp_eq_method():
+    r1 = regular.compile("[01]")
+    r2 = regular.compile("[34]")
+    r3 = regular.compile("[01]")
+    text = "01234501"
+    text2 = "23450101"
+    m1 = r1.find(text)
+    m2 = r2.find(text)
+    m3 = r3.find(text)
+    m4 = r1.find(text2)  # same match string, different location
+    assert type(m1) is Match
+    assert type(m2) is Match
+    assert type(m3) is Match
+    assert type(m4) is Match
+    assert m1 == m3
+    assert (m1 == m2) is False
+    assert m4.as_str == m1.as_str
+    assert (m1 == m4) is False  # matched same string, but different location
+
+
+def test_match_richcmp_ne_method():
+    r1 = regular.compile("[01]")
+    r2 = regular.compile("[34]")
+    r3 = regular.compile("[01]")
+    text = "01234501"
+    text2 = "23450101"
+    m1 = r1.find(text)
+    m2 = r2.find(text)
+    m3 = r3.find(text)
+    m4 = r1.find(text2)  # same match string, different location
+    assert type(m1) is Match
+    assert type(m2) is Match
+    assert type(m3) is Match
+    assert type(m4) is Match
+    assert (m1 != m3) is False
+    assert m1 != m2
+    assert m4.as_str == m1.as_str
+    assert m1 != m4  # matched same string, but different location
+
+
 # RegularExpression class
 
 

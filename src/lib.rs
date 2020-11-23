@@ -151,6 +151,16 @@ impl PyObjectProtocol<'_> for Match {
             .trim()
             .into())
     }
+
+    fn __richcmp__(&self, other: Match, op: CompareOp) -> PyResult<bool> {
+        match op {
+            CompareOp::Eq => Ok(self == &other),
+            CompareOp::Ne => Ok(self != &other),
+            _ => Err(RegularUnimplementedError::new_err(
+                "unimplemented comparison operator",
+            )),
+        }
+    }
 }
 
 // Functions
