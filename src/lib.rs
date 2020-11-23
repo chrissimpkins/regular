@@ -9,6 +9,7 @@ use regex::{Regex, RegexBuilder};
 #[pymodule]
 fn regular(py: Python, m: &PyModule) -> PyResult<()> {
     // Classes
+    m.add_class::<Match>()?;
     m.add_class::<RegularExpression>()?;
     // Functions
     #[pyfn(m, "compile")]
@@ -120,7 +121,6 @@ impl RegularExpression {
     //     IterNextOutput::Return("end")
     // }
 }
-
 #[pyclass(dict, module = "regular")]
 #[derive(Clone, Debug, Eq, PartialEq)]
 struct Match {
@@ -132,6 +132,25 @@ struct Match {
     range: (usize, usize),
     #[pyo3(get, set)]
     as_str: String,
+}
+
+#[pyproto]
+impl PyObjectProtocol<'_> for Match {
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!("{:?}", &self)
+            .replace("{", "<")
+            .replace("}", ">")
+            .trim()
+            .into())
+    }
+
+    fn __str__(&self) -> PyResult<String> {
+        Ok(format!("{:?}", &self)
+            .replace("{", "<")
+            .replace("}", ">")
+            .trim()
+            .into())
+    }
 }
 
 // Functions

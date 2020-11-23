@@ -1,6 +1,28 @@
 import pytest
 
 import regular
+from regular import Match
+
+# Match class
+
+
+def test_match_str_method():
+    regex = regular.compile("[01]")
+    text = "10234510"
+    m = regex.find(text)
+    assert type(m) is Match
+    assert m.__str__() == 'Match < start: 0, end: 1, range: (0, 1), as_str: "1" >'
+
+
+def test_match_repr_method():
+    regex = regular.compile("[01]")
+    text = "10234510"
+    m = regex.find(text)
+    assert type(m) is Match
+    assert m.__repr__() == 'Match < start: 0, end: 1, range: (0, 1), as_str: "1" >'
+
+
+# RegularExpression class
 
 
 def test_regularexpression_str_method():
