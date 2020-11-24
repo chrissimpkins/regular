@@ -83,8 +83,8 @@ impl PyObjectProtocol<'_> for RegularExpression {
 #[pymethods]
 impl RegularExpression {
     // auxiliary methods
-    pub fn as_str(&self) -> String {
-        self.regex.as_str().into()
+    pub fn as_str(&self) -> &str {
+        self.regex.as_str()
     }
 
     // find methods
@@ -134,6 +134,7 @@ impl RegularExpression {
         self.regex.replacen(haystack_str, limit, replace_str).into()
     }
 
+    // split methods
     pub fn split<'t>(&self, haystack_str: &'t str) -> Vec<&'t str> {
         self.regex.split(haystack_str).collect()
     }
