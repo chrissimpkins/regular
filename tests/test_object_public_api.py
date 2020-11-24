@@ -245,3 +245,27 @@ def test_regularexpression_split_no_match():
     m = regex.split(text)
     assert type(m) is list
     assert m == ["a b \t  c\td    e"]
+
+
+# RegularExpression splitn tests
+
+
+def test_regularexpression_splitn():
+    regex = regular.compile(r"[ \t]+")
+    text = "a b \t  c\td    e"
+    m = regex.splitn(text, 2)
+    assert type(m) is list
+    assert m == ["a", "b \t  c\td    e"]
+    m2 = regex.splitn(text, 3)
+    assert type(m2) is list
+    assert m2 == ["a", "b", "c\td    e"]
+    m3 = regex.splitn(text, 0)
+    assert m3 == []
+
+
+def test_regularexpression_splitn_no_match():
+    regex = regular.compile(r"[01]")
+    text = "a b \t  c\td    e"
+    m = regex.splitn(text, 3)
+    assert type(m) is list
+    assert m == ["a b \t  c\td    e"]

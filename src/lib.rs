@@ -137,6 +137,10 @@ impl RegularExpression {
     pub fn split<'t>(&self, haystack_str: &'t str) -> Vec<&'t str> {
         self.regex.split(haystack_str).collect()
     }
+
+    pub fn splitn<'t>(&self, haystack_str: &'t str, limit: usize) -> Vec<&'t str> {
+        self.regex.splitn(haystack_str, limit).collect()
+    }
 }
 
 #[pyclass(dict, module = "regular")]
