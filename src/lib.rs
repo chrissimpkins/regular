@@ -1,4 +1,5 @@
 // #![allow(unused)]
+use std::boxed::Box;
 
 use pyo3::class::basic::{CompareOp, PyObjectProtocol};
 use pyo3::class::iter::IterNextOutput;
@@ -17,6 +18,7 @@ fn regular(py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<Match>()?;
     m.add_class::<MatchesIterator>()?;
     m.add_class::<RegularExpression>()?;
+    m.add_class::<SplitIterator>()?;
     // Functions
     #[pyfn(m, "compile")]
     fn compile_py(_py: Python, regex_str: &str) -> PyResult<RegularExpression> {
@@ -112,7 +114,7 @@ impl RegularExpression {
 
     pub fn find_iter(&self, haystack_str: &str) -> MatchesIterator {
         MatchesIterator {
-            iterator: std::boxed::Box::new(self.find_all(haystack_str).into_iter()),
+            iterator: Box::new(self.find_all(haystack_str).into_iter()),
         }
     }
 
@@ -141,6 +143,18 @@ impl RegularExpression {
 
     pub fn splitn<'t>(&self, haystack_str: &'t str, limit: usize) -> Vec<&'t str> {
         self.regex.splitn(haystack_str, limit).collect()
+    }
+
+    pub fn split_iter<'t>(&self, haystack_str: &'t str) -> SplitIterator {
+        SplitIterator {
+            iterator: Box::new(
+                self.regex
+                    .split(haystack_str)
+                    .map(|x| x.to_string())
+                    .collect::<Vec<String>>()
+                    .into_iter(),
+            ),
+        }
     }
 }
 
@@ -210,6 +224,25 @@ impl PyIterProtocol for MatchesIterator {
     fn __next__(mut slf: PyRefMut<Self>) -> IterNextOutput<Match, &'static str> {
         match slf.iterator.next() {
             Some(mo) => IterNextOutput::Yield(mo),
+            None => IterNextOutput::Return("Ended"),
+        }
+    }
+}
+
+#[pyclass(dict, module = "regular")]
+struct SplitIterator {
+    iterator: Box<dyn Iterator<Item = String> + Send>,
+}
+
+#[pyproto]
+impl PyIterProtocol for SplitIterator {
+    fn __iter__(slf: PyRef<Self>) -> PyRef<Self> {
+        slf
+    }
+
+    fn __next__(mut slf: PyRefMut<Self>) -> IterNextOutput<String, &'static str> {
+        match slf.iterator.next() {
+            Some(spl) => IterNextOutput::Yield(spl),
             None => IterNextOutput::Return("Ended"),
         }
     }

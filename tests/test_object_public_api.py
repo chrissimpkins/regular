@@ -269,3 +269,31 @@ def test_regularexpression_splitn_no_match():
     m = regex.splitn(text, 3)
     assert type(m) is list
     assert m == ["a b \t  c\td    e"]
+
+
+# RegularExpression split_iter tests
+
+
+def test_regularexpression_split_iter():
+    regex = regular.compile(r"[ \t]+")
+    text = "a b \t  c\td    e"
+    m = regex.split_iter(text)
+    assert next(m) == "a"
+    assert next(m) == "b"
+    assert next(m) == "c"
+    assert next(m) == "d"
+    assert next(m) == "e"
+    with pytest.raises(StopIteration):
+        next(m)
+    m2 = regex.split_iter(text)
+    for match in m2:
+        assert type(match) is str
+
+
+def test_regularexpression_split_iter_no_match():
+    regex = regular.compile(r"[01]")
+    text = "a b \t  c\td    e"
+    m = regex.split_iter(text)
+    assert next(m) == "a b \t  c\td    e"
+    with pytest.raises(StopIteration):
+        next(m)
