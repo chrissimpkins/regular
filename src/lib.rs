@@ -266,21 +266,3 @@ create_exception!(
     RegularUnimplementedError,
     pyo3::exceptions::PyException
 );
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    // RegularExpression struct compile tests
-    #[test]
-    fn test_regularexpression_compile_success() {
-        // should not fail
-        assert!(RegularExpression::new("[^01]").is_ok());
-    }
-
-    #[test]
-    fn test_regularexpression_compile_fail() {
-        // should error on invalid regex definition string
-        assert!(RegularExpression::new("\\\\\\\\\\\\\\").is_err());
-    }
-}
