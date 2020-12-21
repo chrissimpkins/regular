@@ -84,9 +84,9 @@ def test_regularexpression_richcmp_eq_method():
     assert type(r1) is RegularExpression
     assert type(r2) is RegularExpression
     assert type(r3) is RegularExpression
-    assert r1 == r2
+    assert r1 == r2  # assert equality
+    assert r1 is not r2  # but they are not the same object
     assert (r1 == r3) is False
-    assert r1 is not r2
 
 
 def test_regularexpression_richcmp_ne_method():
