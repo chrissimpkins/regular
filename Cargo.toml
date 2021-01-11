@@ -15,7 +15,7 @@ name = "regular"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-regex = "1.4.2"
+regex = "1.4.3"
 
 [dependencies.pyo3]
 version = "0.13.1"
