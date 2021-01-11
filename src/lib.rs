@@ -145,7 +145,7 @@ impl RegularExpression {
         self.regex.splitn(haystack_str, limit).collect()
     }
 
-    pub fn split_iter<'t>(&self, haystack_str: &'t str) -> SplitIterator {
+    pub fn split_iter(&self, haystack_str: &str) -> SplitIterator {
         SplitIterator {
             iterator: Box::new(
                 self.regex
