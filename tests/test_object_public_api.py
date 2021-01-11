@@ -1,6 +1,21 @@
+import re
+
 import pytest
 
 import regular
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# Public module functions
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+def test_version_function():
+    version = regular.version()
+    assert re.match(r"\d{1,3}\.\d{1,3}\.\d{1,3}", version) is not None
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
@@ -76,6 +91,7 @@ def test_regularexpression_find():
     assert m.end == 15
     assert m.range() == (2, 15)
     assert m.text == "categorically"
+    # indices are appropriately defined for string slices
     assert test_string[m.start : m.end] == "categorically"
 
 
@@ -93,6 +109,7 @@ def test_regularexpression_find_all():
     regex = regular.compile("[01]")
     text = "0123410"
     i = regex.find_all(text)
+    # find_all returns List[Optional[regular.Match]]
     assert type(i) is list
     assert len(i) == 4
     for item in i:
