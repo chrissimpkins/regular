@@ -24,6 +24,10 @@ fn regular(py: Python, m: &PyModule) -> PyResult<()> {
     fn compile_py(_py: Python, regex_str: &str) -> PyResult<RegularExpression> {
         re_compile(regex_str)
     }
+    #[pyfn(m, "version")]
+    fn version_py(_py: Python) -> String {
+        version()
+    }
     // Custom exceptions
     m.add(
         "RegularUnimplementedError",
@@ -256,6 +260,10 @@ fn re_compile(regex_str: &str) -> PyResult<RegularExpression> {
         Ok(r) => Ok(r),
         Err(e) => Err(PyValueError::new_err(e.to_string())),
     }
+}
+
+fn version() -> String {
+    env!("CARGO_PKG_VERSION").to_string()
 }
 
 // ===================================================
