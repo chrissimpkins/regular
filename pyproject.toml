@@ -15,4 +15,4 @@ python = "^3.6"
 [tool.poetry.dev-dependencies]
 pytest = "^6.1"
 wheel = "*"
-maturin = "==0.9.4"
+maturin = "==0.10.0"
