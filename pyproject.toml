@@ -13,6 +13,6 @@ homepage = "https://github.com/chrissimpkins/regular"
 python = "^3.6"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.1"
+pytest = "^7.0"
 wheel = "*"
 maturin = "==0.10.6"
