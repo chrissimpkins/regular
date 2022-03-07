@@ -18,7 +18,7 @@ crate-type = ["cdylib", "rlib"]
 regex = "1.4.3"
 
 [dependencies.pyo3]
-version = "0.15.0"
+version = "0.16.1"
 features = ["extension-module"]
 
 [package.metadata.maturin]
